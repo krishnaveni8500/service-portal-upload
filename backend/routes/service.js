@@ -85,15 +85,13 @@ router.post("/add", auth, upload.single("file"), async (req, res) => {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
-    // ☁️ upload to S3
-    const fileUrl = await uploadFile(req.file);
-
+   const fileKey = await uploadFile(req.file);
     // 💾 save in MongoDB
     const service = new Service({
       userId: req.user.id,
       title: req.body.title,
       description: req.body.description,
-      fileUrl
+      fileKey
     });
 
     await service.save();
@@ -113,7 +111,9 @@ router.post("/add", auth, upload.single("file"), async (req, res) => {
    GET ALL (ADMIN)
 ========================= */
 router.get("/all", auth, async (req, res) => {
-  const services = await Service.find();
+  const services = await Service.find()
+   .populate("userId", "name email")
+   .populate("viewedBy.userId", "name email");
   res.json(services);
 });
 
@@ -121,8 +121,15 @@ router.get("/all", auth, async (req, res) => {
    GET USER SERVICES
 ========================= */
 router.get("/my", auth, async (req, res) => {
-  const services = await Service.find({ userId: req.user.id });
+
+  const services = await Service.find({
+    userId: req.user.id
+  })
+    .populate("userId", "name email")
+    .populate("viewedBy.userId", "name email");
+
   res.json(services);
+
 });
 
 /* =========================
@@ -136,16 +143,31 @@ router.post("/view/:id", auth, async (req, res) => {
       return res.status(404).json({ message: "Not found" });
     }
 
-    service.viewedBy.push({
-      userId: req.user.id
+ // ✅ CHECK IF USER ALREADY VIEWED
+    const alreadyViewed = service.viewedBy.find(
+      v => v.userId.toString() === req.user.id
+    );
+
+    // ✅ ADD ONLY ONCE
+    if (!alreadyViewed) {
+
+      service.viewedBy.push({
+        userId: req.user.id
+      });
+
+      await service.save();
+    }
+
+    res.json({
+      message: "View recorded"
     });
 
-    await service.save();
-
-    res.json({ message: "View recorded" });
-
   } catch (err) {
-    res.status(500).json({ error: err.message });
+
+    res.status(500).json({
+      error: err.message
+    });
+
   }
 });
 

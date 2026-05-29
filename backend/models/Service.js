@@ -13,18 +13,24 @@
 const mongoose = require("mongoose");
 
 const ServiceSchema = new mongoose.Schema({
-  userId: String,
+  userId: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "User"
+},
   title: String,
   description: String,
-  fileUrl: String,
+  fileKey: String,
 
   // 👇 NEW FIELD (track viewers)
   viewedBy: [
-    {
-      userId: String,
-      viewedAt: { type: Date, default: Date.now }
-    }
-  ],
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    },
+    viewedAt: { type: Date, default: Date.now }
+  }
+],
 
   createdAt: { type: Date, default: Date.now }
 });

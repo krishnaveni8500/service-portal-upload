@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:3000/api"
+  baseURL: "/api"//"http://localhost:3000/api"//change fron ec2
 });
 
 // attach token automatically

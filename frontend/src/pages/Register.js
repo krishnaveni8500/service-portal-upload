@@ -42,9 +42,10 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("user");
+  const [superKey, setSuperKey] = useState("");
 
   const register = async () => {
-    await API.post("/auth/register", { name, email, password,role });
+    await API.post("/auth/register", { name, email, password,role,superKey });
     alert("Registered successfully");
     window.location.href = "/";
   };
@@ -60,6 +61,16 @@ export default function Register() {
         <option value="user">User</option>
         <option value="admin">Admin</option>
        </select>
+      {/* ✅ SHOW ONLY FOR ADMIN */}
+      {role === "admin" && (
+        <input
+          type="password"
+          placeholder="Enter Super Admin Key"
+          value={superKey}
+          onChange={(e) => setSuperKey(e.target.value)}
+        />
+      )}
+
 
       <button onClick={register}>Register</button>
     </div>

@@ -53,7 +53,13 @@ export default function Login() {
     localStorage.setItem("token", res.data.token);
     localStorage.setItem("role", res.data.role);
 
-    window.location.href = "/dashboard";
+    if (res.data.role === "admin") {
+  localStorage.setItem("role", "admin");
+  window.location.href = "/admin";
+} else {
+  localStorage.setItem("role", "user");
+  window.location.href = "/dashboard";
+}
   } catch (err){
     alert("login failed")
   }
