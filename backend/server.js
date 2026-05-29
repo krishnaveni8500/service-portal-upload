@@ -1,32 +1,4 @@
-// const crypto = require("crypto");
-// global.crypto = crypto;
 
-// const express = require("express");
-// const mongoose = require("mongoose");
-// const cors = require("cors");
-// require("dotenv").config();
-// const app = express();
-
-// app.use(cors({//change from ec2
-//   origin: "*",
-//   methods: ["GET", "POST", "PUT", "DELETE"],
-//   credentials: true
-// }));
-// app.use(express.json());
-
-
-***REMOVED***
-//   .then(() => console.log("MongoDB connected"))
-//   .catch(err => console.log("MongoDB error:", err));
-// const documentRoutes = require("./routes/documentRoutes");
-// app.use("/api/auth", require("./routes/auth"));
-// app.use("/api/service", require("./routes/service"));
-// app.use("/api", documentRoutes);
-// app.get("/test", (req, res) => {
-//   res.json({ message: "Backend is working" });
-// });
-
-// app.listen(3000, () => console.log("Server running on 3000"));
 
 const crypto = require("crypto");
 global.crypto = crypto;
